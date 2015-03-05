@@ -1,0 +1,17 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET   /                      controllers.Application.index
+
+GET   /balance1/:id           controllers.Application.balance1(id:Long)
+GET   /balance2/:id           controllers.Application.balance2(id:Long)
+GET   /balance3/:id           controllers.Application.balance3(id:Long)
+
+GET   /withdraw1/:id/:delta   controllers.Application.withdraw1(id:Long,delta:Int)
+GET   /withdraw2/:id/:delta   controllers.Application.withdraw2(id:Long,delta:Int)
+GET   /withdraw3/:id/:delta   controllers.Application.withdraw3(id:Long,delta:Int)
+
+# Map static resources from the /public folder to the /assets URL path
+GET   /assets/*file          controllers.Assets.at(path="/public", file)
