@@ -6,52 +6,30 @@ import play.api.libs.json.Json
 
 object Application extends Controller {
 
+  def version(v: String) = v match {
+    case "v0" => models.RaceCondition0
+    case "v1" => models.RaceCondition1
+    case "v2" => models.RaceCondition2
+    case "v3" => models.RaceCondition3
+    case _    => throw new IllegalArgumentException
+  }
+
   def index = Action {
     Ok("Your new application is ready.")
   }
 
-  def balance1(id: Long) = Action {
-    val result = models.RaceCondition1.balance(id)
-    result.fold(Ok(Json.obj("status" -> 0, "msg" -> "account not found"))) {
-      r => Ok(Json.obj("status" -> 1, "id" -> id, "balance" -> r))
+  def balance(v: String, id: Long) = Action {
+    val result = version(v).balance(id)
+    result.fold(Ok(Json.obj("status" -> 0, "msg" -> "account not found", "v" -> v))) {
+      r => Ok(Json.obj("status" -> 1, "id" -> id, "balance" -> r, "v" -> v))
     }
   }
 
-  def balance2(id: Long) = Action {
-    val result = models.RaceCondition2.balance(id)
-    result.fold(Ok(Json.obj("status" -> 0, "msg" -> "account not found"))) {
-      r => Ok(Json.obj("status" -> 1, "id" -> id, "balance" -> r))
-    }
-  }
-
-  def balance3(id: Long) = Action {
-    val result = models.RaceCondition3.balance(id)
-    result.fold(Ok(Json.obj("status" -> 0, "msg" -> "account not found"))) {
-      r => Ok(Json.obj("status" -> 1, "id" -> id, "balance" -> r))
-    }
-  }
-
-  def withdraw1(id: Long, delta: Int) = Action {
+  def withdraw(v: String, id: Long, delta: Int) = Action {
+    val result = version(v).withdraw(id, delta)
     val tn = Thread.currentThread().getName
-    val result = models.RaceCondition1.withdraw(id, delta)
-    result.fold(Ok(Json.obj("status" -> 0, "msg" -> "account not found", "t" -> tn))) {
-      r => Ok(Json.obj("status" -> 1, "id" -> id, "balance" -> r, "t" -> tn))
-    }
-  }
-
-  def withdraw2(id: Long, delta: Int) = Action {
-    val tn = Thread.currentThread().getName
-    val result = models.RaceCondition2.withdraw(id, delta)
-    result.fold(Ok(Json.obj("status" -> 0, "msg" -> "account not found", "t" -> tn))) {
-      r => Ok(Json.obj("status" -> 1, "id" -> id, "balance" -> r, "t" -> tn))
-    }
-  }
-
-  def withdraw3(id: Long, delta: Int) = Action {
-    val tn = Thread.currentThread().getName
-    val result = models.RaceCondition3.withdraw(id, delta)
-    result.fold(Ok(Json.obj("status" -> 0, "msg" -> "account not found", "t" -> tn))) {
-      r => Ok(Json.obj("status" -> 1, "id" -> id, "balance" -> r, "t" -> tn))
+    result.fold(Ok(Json.obj("status" -> 0, "msg" -> "account not found", "t" -> tn, "v" -> v))) {
+      r => Ok(Json.obj("status" -> 1, "id" -> id, "balance" -> r, "t" -> tn, "v" -> v))
     }
   }
 

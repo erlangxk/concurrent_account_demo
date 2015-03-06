@@ -6,7 +6,12 @@ import anorm.SqlParser._
 import play.api.Play.current
 import play.api.Logger
 
-object RaceCondition1 {
+trait RC {
+  def withdraw(id: Long, delta: Int): Option[Int]
+  def balance(id: Long): Option[Int]
+}
+
+object RaceCondition1 extends RC {
 
   def withdraw(id: Long, delta: Int) = {
     balance(id) flatMap { b =>

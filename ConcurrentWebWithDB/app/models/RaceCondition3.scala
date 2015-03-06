@@ -6,7 +6,7 @@ import anorm.SqlParser._
 import play.api.Play.current
 import play.api.Logger
 
-object RaceCondition3 {
+object RaceCondition3 extends RC{
 
   def withdraw(id: Long, delta: Int) = DB.withTransaction { implicit conn =>
     val sql = SQL"call proc_withdraw($id,$delta)"
